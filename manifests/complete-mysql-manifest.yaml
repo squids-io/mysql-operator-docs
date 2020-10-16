@@ -1,0 +1,32 @@
+apiVersion: mysql.grds.cloud/v1
+kind: MysqlCluster
+metadata:
+  name: mysqlcluster-sample
+spec:
+  clusterSpec:
+    version: "5.7"
+    mode: HACluster
+    matchLabels:
+      AppName: mysqlcluster-sample
+      CreatedBy: grds.cloud
+      DBType: mysql
+      DBBranch: mysql5.7
+      Type: Database
+  databaseResource:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 25m
+        memory: "107374182"
+    storage:
+      path: /var/lib/mysql
+      size: 21474836480
+      ReadOnly: false
+      storageClass: "hostpath"
+    iosp: 10000
+  replicas: 3
+  slaveReplicas: 1
+  configTemplate: "mysql-5.7.0-audit"
+

@@ -1,0 +1,58 @@
+apiVersion: v1
+data:
+  clusterNoLeaderChange: "false"
+  config: |
+    cpuOverRate: 20
+    memoryOverRate: 10
+    currentRuntimeEnv: "dev"
+    commonTolerate:
+      - key: qfusion/worker
+        operator: Exists
+    proxyServiceType: nodeport
+    proxyReplicas: 2
+    clusterServiceType: nodeport
+    proxyConfigJson: '{"configMapName": "haproxy-ingress-tcp", "configMapNs": "qfusion", "portStart": 20000, "portEnd": 29999}'
+    images:
+    - name: mysql-backup-trigger
+      image: grds/qfb-backup-job:v1.0.0
+    clusterConfigs:
+      - name: mysql
+        version: 5.6
+        storageClass: csi-localpv
+        images:
+          - name: database
+            image: grds/mysql-5.6-audit:v3.8.0
+          - name: restore
+            image: grds/qfb-mysql-5.6:v1.0.0
+          - name: leader
+            image: grds/mysqlleader:grds
+          - name: pmm
+            image: grds/pmm-client:v1.10.4
+      - name: mysql
+        version: 5.7
+        storageClass: csi-localpv
+        images:
+          - name: database
+            image: grds/mysql-5.7-audit:v3.8.0
+          - name: restore
+            image: grds/qfb-mysql-5.7:v1.0.0
+          - name: leader
+            image: grds/mysqlleader:grds
+          - name: pmm
+            image: grds/pmm-client:v1.10.4
+      - name: mysql
+        version: 8.0
+        storageClass: csi-localpv
+        images:
+          - name: database
+            image: grds/mysql-8.0-audit:v3.8.0
+          - name: restore
+            image: grds/qfb-mysql-8.0:v1.0.0
+          - name: leader
+            image: grds/mysqlleader:grds
+          - name: pmm
+            image: grds/pmm-client:v1.10.4
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: kube-system

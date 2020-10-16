@@ -1,0 +1,6 @@
+site_name: Mysql Operator
+repo_url: https://github.com/GrdsCloud/mysql-operator-docs.git
+theme: readthedocs
+
+nav:
+  - Concepts: 'index.md'
