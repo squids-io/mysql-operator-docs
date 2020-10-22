@@ -1,6 +1,10 @@
-site_name: Mysql Operator
+site_name: MySQL Operator
 repo_url: https://github.com/GrdsCloud/mysql-operator-docs.git
 theme: readthedocs
 
 nav:
   - Concepts: 'index.md'
+  - Quickstart: 'quickstart.md'
+  - User guide: 'user.md'
+  - Reference:
+    - Config parameters: 'reference/operator_parameters.md'

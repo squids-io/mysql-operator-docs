@@ -8,7 +8,7 @@ manages MySQL clusters on Kubernetes (K8s):
    user submits a new manifest, the operator fetches that manifest and spawns a
    new MySQL cluster along with all necessary entities such as K8s
    StatefulSets and MySQL roles.  See this
-   [MySQL cluster manifest](../manifests/complete-mysql-manifest.yaml)
+   [MySQL cluster manifest](../manifests/minimal-mysql-manifest.yaml)
    for settings that a manifest may contain.
 
 2. The operator also watches updates to [its own configuration](../manifests/configmap.yaml)
