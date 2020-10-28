@@ -1,16 +1,73 @@
 <h1>User Guide</h1>
 Learn how to work with the MySQL Operator in a Kubernetes (K8s) environment.
 
+## Create ServiceAccount for MySQLCluster
+
+Specify the namespace of the deploy MySQL cluster
+
+```shell
+export NAMESPACE=<your-namespace>
+```
+
+Apply ServiceAccount and ClusterRoleBinding
+
+```yaml
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mysql-operator
+  namespace: $NAMESPACE
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: mysql-operator-rbac-$NAMESPACE
+  labels:
+    app.kubernetes.io/name: mysql-operator
+subjects:
+  - kind: ServiceAccount
+    name: mysql-operator
+    namespace: $NAMESPACE
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+EOF
+```
+
+## create timezone
+
+This time zone will be mounted to the mysql database container as the time zone of the mysql container
+Specify the time zone you want mysql to run
+
+For Example:
+
+```yaml
+kubectl apply -f - <<EOF
+apiVersion: v1
+data:
+  timezone: |
+    Asia/Shanghai
+kind: ConfigMap
+metadata:
+  name: timezone
+  namespace: $NAMESPACE
+EOF
+```
+
 ## Create a manifest for a new MySQL cluster
 
 Make sure you have [set up](quickstart.md) the operator. Then you can create a
 new MySQL cluster by applying manifest like this [minimal example](../manifests/minimal-mysql-manifest.yaml):
 
 ```yaml
+kubectl apply -f - <<EOF
 apiVersion: mysql.grds.cloud/v1
 kind: MysqlCluster
 metadata:
   name: mysqlcluster-sample
+  namespace: $NAMESPACE
 spec:
   clusterSpec:
     version: "5.7"
@@ -28,6 +85,7 @@ spec:
   replicas: 2
   slaveReplicas: 1
   configTemplate: "mysql-5.7.0-audit"
+EOF
 ```
 
 Once you cloned the MySQL Operator [repository](https://github.com/GrdsCloud/mysql-operator-docs.git)

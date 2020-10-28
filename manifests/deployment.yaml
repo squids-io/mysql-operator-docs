@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-operator
+  labels:
+    app.kubernetes.io/name: mysql-operator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mysql-operator
+  replicas: 1
+  template:
+    metadata:
+      name: mysql-operator
+      labels:
+        app.kubernetes.io/name: mysql-operator
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: mysql-operator
+      containers:
+        - name: operator
+          image: docker.io/grds/mysql-operator:v1.0.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /manager
+          args:
+            - --enable-leader-election
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+            - name: logdir
+              mountPath: /var/log/operator
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+        - name: logdir
+          hostPath:
+            path: /apps/logs/grds/operator/
+            type: DirectoryOrCreate
+      tolerations:
+        - effect: NoSchedule
+          key: grds/node
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+        - effect: NoExecute
+          key: node.kubernetes.io/not-ready
+          operator: Exists
+          tolerationSeconds: 300
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: database-operator
+              topologyKey: kubernetes.io/hostname
+

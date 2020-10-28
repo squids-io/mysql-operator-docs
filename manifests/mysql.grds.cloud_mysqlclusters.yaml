@@ -1,0 +1,230 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.3.0
+  name: mysqlclusters.mysql.grds.cloud
+  labels:
+    app.kubernetes.io/name: mysql-operator
+spec:
+  group: mysql.grds.cloud
+  names:
+    kind: MysqlCluster
+    listKind: MysqlClusterList
+    plural: mysqlclusters
+    singular: mysqlcluster
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: MysqlCluster is the Schema for the mysqlclusters API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: MysqlClusterSpec defines the desired state of MysqlCluster
+          properties:
+            clusterSpec:
+              description: clusterSpec
+              properties:
+                image:
+                  description: image definition
+                  type: string
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels definition
+                  type: object
+                mode:
+                  description: mode like HACluster, Singleton
+                  type: string
+                version:
+                  description: version like mysql:5.6, 5.7 oracle:11g, 12c, 19c sql
+                    server:xxx
+                  type: string
+              type: object
+            configTemplate:
+              description: configTemplate name
+              type: string
+            customResources:
+              additionalProperties:
+                properties:
+                  resources:
+                    description: resources include cpu, memory
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Limits describes the maximum amount of compute
+                          resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        description: 'Requests describes the minimum amount of compute
+                          resources required. If Requests is omitted for a container,
+                          it defaults to Limits if that is explicitly specified, otherwise
+                          to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                        type: object
+                    type: object
+                  storage:
+                    description: storages definition
+                    properties:
+                      iops:
+                        description: iops
+                        format: int64
+                        type: integer
+                      size:
+                        description: size definition
+                        format: int64
+                        type: integer
+                      storageClass:
+                        description: storageClass definition
+                        type: string
+                    type: object
+                type: object
+              description: customResources
+              type: object
+            databaseResource:
+              description: databaseResource
+              properties:
+                resources:
+                  description: resources include cpu, memory
+                  properties:
+                    limits:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      description: 'Limits describes the maximum amount of compute
+                        resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                      type: object
+                    requests:
+                      additionalProperties:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                        x-kubernetes-int-or-string: true
+                      description: 'Requests describes the minimum amount of compute
+                        resources required. If Requests is omitted for a container,
+                        it defaults to Limits if that is explicitly specified, otherwise
+                        to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                      type: object
+                  type: object
+                storage:
+                  description: storages definition
+                  properties:
+                    iops:
+                      description: iops
+                      format: int64
+                      type: integer
+                    size:
+                      description: size definition
+                      format: int64
+                      type: integer
+                    storageClass:
+                      description: storageClass definition
+                      type: string
+                  type: object
+              type: object
+            replicas:
+              description: replicas definition
+              format: int32
+              type: integer
+            slaveReplicas:
+              description: slaveReplicas definition
+              format: int32
+              type: integer
+          type: object
+        status:
+          description: MysqlClusterStatus defines the observed state of MysqlCluster
+          properties:
+            PermitRollback:
+              type: boolean
+            collisionCount:
+              description: collisionCount is the count of hash collisions for the
+                StatefulSet. The StatefulSet controller uses this field as a collision
+                avoidance mechanism when it needs to create the name for the newest
+                ControllerRevision.
+              format: int32
+              type: integer
+            currentReplicas:
+              description: CurrentReplicas is the number of Pods created by the StatefulSet
+                controller from the StatefulSet version indicated by currentRevision.
+              format: int32
+              type: integer
+            currentRevision:
+              description: currentRevision, if not empty, indicates the version of
+                the StatefulSet used to generate Pods in the sequence [0,currentReplicas).
+              type: string
+            customStatus:
+              type: string
+            fsmStatus:
+              type: string
+            observedGeneration:
+              description: observedGeneration is the most recent generation observed
+                for this StatefulSet. It corresponds to the StatefulSet's generation,
+                which is updated on mutation by the API Server.
+              format: int64
+              type: integer
+            readyReplicas:
+              description: readyReplicas is the number of Pods created by the StatefulSet
+                controller that have a Ready Condition.
+              format: int32
+              type: integer
+            replicas:
+              description: replicas is the number of Pods created by the StatefulSet
+                controller.
+              format: int32
+              type: integer
+            statusDetails:
+              type: string
+            updateRevision:
+              description: updateRevision, if not empty, indicates the version of
+                the StatefulSet used to generate Pods in the sequence [replicas-updatedReplicas,replicas)
+              type: string
+            updatedReplicas:
+              description: updatedReplicas is the number of Pods created by the StatefulSet
+                controller from the StatefulSet version indicated by updateRevision.
+              format: int32
+              type: integer
+          required:
+          - PermitRollback
+          - replicas
+          type: object
+      type: object
+  version: v1
+  versions:
+  - name: v1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

@@ -1,0 +1,61 @@
+apiVersion: v1
+data:
+  clusterNoLeaderChange: "false"
+  config: |
+    cpuOverRate: 2
+    memoryOverRate: 1
+    commonTolerate:
+      - key: qfusion/worker
+        operator: Exists
+    proxyServiceType: "nodeport"
+    proxyIngressVIP: ""
+    proxyReplicas: 2
+    clusterServiceType: "nodeport"
+    clusterIngressVIP: ""
+    proxyConfigJson: '{"configMapName": "haproxy-ingress-tcp", "configMapNs": "grds", "portStart": 20000, "portEnd": 29999}'
+    clusterForcedAntiAffinity: false
+    images:
+    - name: mysql-backup-trigger
+      image: docker.io/grds/qfb-backup-job:v1.0.0
+    clusterConfigs:
+      - name: mysql
+        version: 5.6
+        storageClass: csi-qcfs
+        images:
+          - name: database
+            image: docker.io/grds/mysql:5.6
+          - name: restore
+            image: docker.io/grds/qfb-mysql-5.6:v1.0.0
+          - name: leader
+            image: docker.io/grds/mysqlleader:v1.0.0
+      - name: mysql
+        version: 5.7
+        storageClass: csi-qcfs
+        images:
+          - name: database
+            image: docker.io/grds/mysql:5.7
+          - name: restore
+            image: docker.io/grds/qfb-mysql-5.7:v1.0.0
+          - name: leader
+            image: docker.io/grds/mysqlleader:v1.0.0
+      - name: mysql
+        version: 8.0
+        storageClass: csi-qcfs
+        images:
+          - name: database
+            image: docker.io/grds/mysql:8
+          - name: restore
+            image: docker.io/grds/qfb-mysql-8.0:v1.0.0
+          - name: leader
+            image: docker.io/grds/mysqlleader:v1.0.0
+kind: ConfigMap
+metadata:
+  name: app-config
+---
+apiVersion: v1
+data:
+  timezone: |
+    Asia/Shanghai
+kind: ConfigMap
+metadata:
+  name: timezone
