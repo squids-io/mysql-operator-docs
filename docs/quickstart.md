@@ -1,5 +1,5 @@
 ---
-title: Install the MySQL operator
+title: Install MySQL operator
 shorttitle: Deployment
 weight: 200
 ---
@@ -7,11 +7,10 @@ weight: 200
 ## Prerequisites
 
 - MySQL operator requires Kubernetes v1.14.x or later or k3s.
-- For the [Helm-based installation](#deploy-mysql-operator-with-helm) you need Helm v3.21.0 or later
+- For high availability MySQL,at least 3 nodes k3s/k8s cluster.
 
 ## Deploy the MySQL operator from Kubernetes Manifests
 
-Complete the following steps to deploy the MySQL operator using Kubernetes manifests. Alternatively, you can also [install the operator using Helm](#deploy-mysql-operator-with-helm).
 
 1. Create a controlNamespace called "grds".
 
@@ -43,9 +42,6 @@ Complete the following steps to deploy the MySQL operator using Kubernetes manif
 <p align="center"><img src="./images/helm2.svg" width="150"></p>
 <p align="center">
 
-Complete the following steps to deploy the MySQL operator using Helm. 
-Alternatively, you can also [install the operator using Kubernetes manifests.](#deploy-the-mysql-operator-from-kubernetes-manifests)
-
 > Note: For the Helm-based installation you need [Helm](https://helm.sh/docs/intro/install/#helm) v3.2.4 or later.
 
 1. Add operator chart repository.
@@ -60,6 +56,7 @@ Alternatively, you can also [install the operator using Kubernetes manifests.](#
     ```bash
     helm upgrade --install --wait --create-namespace --namespace grds mysql-operator grdscloud-stable/mysql-operator
     ```
+
 
 ### Check the MySQL operator deployment
 
