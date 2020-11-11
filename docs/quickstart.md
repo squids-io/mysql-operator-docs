@@ -12,9 +12,9 @@ weight: 200
 - For high availability MySQL,at least 3 nodes k3s/k8s cluster.
 
 
-> You can choose [Kubernetes Manifests](## Deploy the MySQL operator from Kubernetes Manifests) or [helm](## Deploy MySQL operator with Helm) to install MySQL operator
+> You can choose [Kubernetes Manifests](#deploy-mysql-operator-from-kubernetes-manifests) or [Helm](#deploy-mysql-operator-with-helm) to install MySQL operator
 
-## Deploy the MySQL operator from Kubernetes Manifests
+## Deploy MySQL operator from Kubernetes Manifests
 
 
 1. Create a controlNamespace called "grds".
