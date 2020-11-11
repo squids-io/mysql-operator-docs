@@ -4,10 +4,15 @@ shorttitle: Deployment
 weight: 200
 ---
 
+
+
 ## Prerequisites
 
 - MySQL operator requires Kubernetes v1.14.x or later or k3s.
 - For high availability MySQL,at least 3 nodes k3s/k8s cluster.
+
+
+> You can choose Kubernetes Manifests or helm to install MySQL operator
 
 ## Deploy the MySQL operator from Kubernetes Manifests
 
@@ -57,6 +62,14 @@ weight: 200
     helm upgrade --install --wait --create-namespace --namespace grds mysql-operator grdscloud-stable/mysql-operator
     ```
 
+> If you using k3s,sometimes helm will not access k3s cluster,please copy the k3s.yaml to .kube/config
+
+```
+[root@10-10-120-194 ~]# helm list -A
+Error: Kubernetes cluster unreachable: Get "http://localhost:8080/version?timeout=32s": dial tcp [::1]:8080: connect: connection refused
+
+cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+```
 
 ### Check the MySQL operator deployment
 
