@@ -12,7 +12,7 @@ weight: 200
 - For high availability MySQL,at least 3 nodes k3s/k8s cluster.
 
 
-> You can choose Kubernetes Manifests or helm to install MySQL operator
+> You can choose [Kubernetes Manifests](## Deploy the MySQL operator from Kubernetes Manifests) or [helm](## Deploy MySQL operator with Helm) to install MySQL operator
 
 ## Deploy the MySQL operator from Kubernetes Manifests
 
@@ -62,7 +62,7 @@ weight: 200
     helm upgrade --install --wait --create-namespace --namespace grds mysql-operator grdscloud-stable/mysql-operator
     ```
 
-> If you using k3s,sometimes helm will not access k3s cluster,please copy the k3s.yaml to .kube/config
+> If you using k3s,sometimes helm will not access k3s cluster,please copy the k3s.yaml to .kube/config,refer to [k3s cluster access](https://rancher.com/docs/k3s/latest/en/cluster-access)
 
 ```
 [root@10-10-120-194 ~]# helm list -A
