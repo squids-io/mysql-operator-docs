@@ -36,25 +36,6 @@ roleRef:
 EOF
 ```
 
-## create timezone
-
-This time zone will be mounted to the mysql database container as the time zone of the mysql container
-Specify the time zone you want mysql to run
-
-For Example:
-
-```yaml
-kubectl apply -f - <<EOF
-apiVersion: v1
-data:
-  timezone: |
-    Asia/Shanghai
-kind: ConfigMap
-metadata:
-  name: timezone
-  namespace: $NAMESPACE
-EOF
-```
 
 ## Create a manifest for a new MySQL cluster
 
